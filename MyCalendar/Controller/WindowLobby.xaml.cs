@@ -22,7 +22,17 @@ namespace MyCalendar.Controller
     {
         public WindowLobby()
         {
+            FontFamilyMapCollection fonts = FontFamily.FamilyMaps;
+            foreach(FontFamily font in Fonts.SystemFontFamilies)
+            {
+                Console.WriteLine(font.Source);
+            }
             InitializeComponent();
+        }
+
+        private void CloseProgram(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 }
