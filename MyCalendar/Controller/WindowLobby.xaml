@@ -5,20 +5,43 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyCalendar.Controller"
         mc:Ignorable="d"
-        Title="MainWindow" Height="640" Width="1060" AllowsTransparency="True" WindowStyle="None">
+        Title="MYCalendar" Height="640" Width="1060" AllowsTransparency="True" WindowStyle="None">
 
     <Grid>
-        <Grid Name="Controller" HorizontalAlignment="Left" Height="640" VerticalAlignment="Top" Width="424" Margin="636,0,0,0">
-            <Rectangle Fill="#FF152D33" x:Name="Program_Title" HorizontalAlignment="Left" Height="50" Stroke="Black" VerticalAlignment="Top" Width="324" Grid.ColumnSpan="2"/>
+        <Grid Name="ProgramTitle" HorizontalAlignment="Left" Height="51" Margin="636,-1,0,0" VerticalAlignment="Top" Width="424">
+            <Rectangle Fill="#FF152D33" x:Name="Program_Title" HorizontalAlignment="Left" Height="50" Stroke="Black" VerticalAlignment="Top" Width="324"/>
             <Label x:Name="Program_Title_Label" Content="MyCalendar" Style="{StaticResource DefaultFont}" FontSize="32"
-				   HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="82,-1,154,588"/>
+				   HorizontalContentAlignment="Left" VerticalContentAlignment="Top" Margin="90,2,170,-2"/>
+
 
             <Rectangle Fill="#FF152D33" x:Name="Program_Close" HorizontalAlignment="Left" Height="50" Stroke="Black" VerticalAlignment="Top" Width="100" Margin="324,0,0,0"/>
 
-            <Rectangle Fill="#FF225E48" x:Name="Program_Options" HorizontalAlignment="Left" Height="590" Stroke="Black" VerticalAlignment="Top" Width="424" Margin="0,50,0,0"/>
             <Rectangle Fill="#FFFF4F4F" Name="Program_Close_Btn_Image" HorizontalAlignment="Left" Height="40" Margin="329,5,0,0" Stroke="Black" VerticalAlignment="Top" Width="90" RadiusX="10" RadiusY="10"/>
             <Button Name="Program_Close_Btn" Style="{StaticResource invisibleButton}" Content="종료" FontSize="28"
                     HorizontalAlignment="Left" Margin="324,0,0,0" VerticalAlignment="Top" Width="100" Height="50" Click="CloseProgram"/>
+        </Grid>
+
+        <Grid Name="Controller" HorizontalAlignment="Left" Height="590" VerticalAlignment="Top" Width="424" Margin="636,50,0,0">
+
+            <Rectangle Fill="#FF225E48" x:Name="Program_Options" HorizontalAlignment="Left" Height="275" Stroke="Black" VerticalAlignment="Top" Width="424" Margin="0,-2,0,0"/>
+            <Rectangle Fill="#FF336F59" HorizontalAlignment="Left" Height="139" Margin="31,54,0,0" Stroke="Black" VerticalAlignment="Top" Width="374" RadiusY="10" RadiusX="10"/>
+
+            <TextBox Name="Program_Input_Year" HorizontalAlignment="Left" Height="30" Margin="35,19,0,0" TextWrapping="Wrap" Text="2021" VerticalAlignment="Top" Width="80" MaxLength="4"
+                         FontSize="22" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Background="{x:Null}" BorderBrush="Black" PreviewTextInput="CheckNumber"/>
+            <Label Content="년" Style="{StaticResource DefaultFont}" FontSize="22" Foreground="Black" VerticalContentAlignment="Bottom"
+                   HorizontalAlignment="Left" Height="35" Margin="115,19,0,0" VerticalAlignment="Top" Width="33"/>
+
+            <TextBox x:Name="Program_Input_Month" HorizontalAlignment="Left" Height="30" Margin="143,19,0,0" TextWrapping="Wrap" Text="11" VerticalAlignment="Top" Width="40" MaxLength="2"
+                FontSize="22" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Background="{x:Null}" BorderBrush="Black"/>
+            <Label Content="월" Style="{StaticResource DefaultFont}" FontSize="22" Foreground="Black" VerticalContentAlignment="Bottom"
+                HorizontalAlignment="Left" Height="35" Margin="183,19,0,0" VerticalAlignment="Top" Width="32"/>
+
+            <Button Content="생성" Style="{StaticResource invisibleButton}" FontSize="26" Foreground="#9900FF00"
+                    HorizontalAlignment="Left" Height="137" Margin="35,54,0,0" VerticalAlignment="Top" Width="370"
+                    Click="CreateNewCalendar"/>
+            
+            <TextBox Name="Program_Console" FontSize="14" IsReadOnly="True"
+                     HorizontalAlignment="Left" Height="62" Margin="31,201,0,0" TextWrapping="Wrap" Text="Console" VerticalAlignment="Top" Width="374"/>
 
         </Grid>
 
@@ -29,9 +52,9 @@
 				   HorizontalAlignment="Left" Height="44" Margin="230,4,0,0" VerticalAlignment="Top" Width="154"/>
 
             <Rectangle Fill="#FF266963" Name="ThisMonth_ContextBar" HorizontalAlignment="Left" Height="76" Stroke="Black" VerticalAlignment="Top" Width="637" Margin="0,49,-1,0"/>
-            <Label Name="ThisMonth_Context1" Content="2021. 11. - 1 / 100" Style="{StaticResource DefaultFont}" FontSize="24"
+            <Label Name="ThisMonth_Context" Content="2021. 11. - 0 / 0" Style="{StaticResource DefaultFont}" FontSize="24"
 				   HorizontalAlignment="Left" Height="33" Margin="5,55,0,0" VerticalAlignment="Top" Width="621" />
-            <Label x:Name="ThisMonth_Context_desc" Content="가장 가까운 일정 : 2021. 11. 04 10:30 > 자료 구조 수업" Style="{StaticResource DefaultFont}" FontSize="21" Foreground="#BFBFBF"
+            <Label x:Name="ThisMonth_Context_desc" Content="캘린더를 생성해주세요." Style="{StaticResource DefaultFont}" FontSize="21" Foreground="#BFBFBF"
 				   HorizontalAlignment="Left" Height="33" Margin="15,86,0,0" VerticalAlignment="Top" Width="611"/>
 
         </Grid>
@@ -43,22 +66,24 @@
 				   HorizontalAlignment="Left" Height="44" Margin="230,4,0,0" VerticalAlignment="Top" Width="154" />
 
             <Rectangle Fill="#FF266963" Name="NextMonth_ContextBar_001" HorizontalAlignment="Left" Height="76" Stroke="Black" VerticalAlignment="Top" Width="637" Margin="0,49,-1,0"/>
-            <Label Name="NextMonth_Context_001" Content="2021. 12. - 1 / 100" Style="{StaticResource DefaultFont}" FontSize="24"
+            <Label Name="NextMonth_Context_001" Content="2021. 12. - 0 / 0" Style="{StaticResource DefaultFont}" FontSize="24"
 				   HorizontalAlignment="Left" Height="33" Margin="5,55,0,0" VerticalAlignment="Top" Width="621" />
-            <Label x:Name="NextMonth_Context_001_desc" Content="가장 가까운 일정 : 2021. 12. 01 00:00 > 12월" Style="{StaticResource DefaultFont}" FontSize="21" Foreground="#BFBFBF"
+            <Label x:Name="NextMonth_Context_001_desc" Content="캘린더를 생성해주세요." Style="{StaticResource DefaultFont}" FontSize="21" Foreground="#BFBFBF"
 				   HorizontalAlignment="Left" Height="33" Margin="15,86,0,0" VerticalAlignment="Top" Width="611"/>
 
             <Rectangle Fill="#FF266963" Name="NextMonth_ContextBar_002" HorizontalAlignment="Left" Height="76" Stroke="Black" VerticalAlignment="Top" Width="637" Margin="0,124,-1,0"/>
-            <Label Name="NextMonth_Context_002" Content="2022. 01. - 1 / 100" Style="{StaticResource DefaultFont}" FontSize="24"
+            <Label Name="NextMonth_Context_002" Content="2022. 01. - 0 / 0" Style="{StaticResource DefaultFont}" FontSize="24"
 				   HorizontalAlignment="Left" Height="33" Margin="5,130,0,0" VerticalAlignment="Top" Width="621" />
-            <Label x:Name="NextMonth_Context_002_desc" Content="가장 가까운 일정 : 2022. 01. 01 00:00 > 새해" Style="{StaticResource DefaultFont}" FontSize="21" Foreground="#BFBFBF"
+            <Label x:Name="NextMonth_Context_002_desc" Content="캘린더를 생성해주세요." Style="{StaticResource DefaultFont}" FontSize="21" Foreground="#BFBFBF"
 				   HorizontalAlignment="Left" Height="33" Margin="15,160,0,0" VerticalAlignment="Top" Width="611"/>
 
             <Rectangle Fill="#FF266963" Name="NextMonth_ContextBar_003" HorizontalAlignment="Left" Height="76" Stroke="Black" VerticalAlignment="Top" Width="637" Margin="0,199,-1,0"/>
-            <Label Name="NextMonth_Context_003" Content="2022. 02. - 1 / 100" Style="{StaticResource DefaultFont}" FontSize="24"
+            <Label Name="NextMonth_Context_003" Content="2022. 02. - 0 / 0" Style="{StaticResource DefaultFont}" FontSize="24"
 				   HorizontalAlignment="Left" Height="33" Margin="5,205,0,0" VerticalAlignment="Top" Width="621" />
-            <Label x:Name="NextMonth_Context_003_desc" Content="가장 가까운 일정 : 2022. 02. 01 00:00 > 2월" Style="{StaticResource DefaultFont}" FontSize="21" Foreground="#BFBFBF"
+            <Label x:Name="NextMonth_Context_003_desc" Content="캘린더를 생성해주세요." Style="{StaticResource DefaultFont}" FontSize="21" Foreground="#BFBFBF"
 				   HorizontalAlignment="Left" Height="33" Margin="15,235,0,0" VerticalAlignment="Top" Width="611"/>
+
+            <Rectangle Name="MusicSelector" Fill="#FF114D37" HorizontalAlignment="Left" Height="317" Margin="636,199,-424,-239" Stroke="Black" VerticalAlignment="Top" Width="424"/>
 
         </Grid>
 
