@@ -58,20 +58,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Controller\WindowLobby.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Controller\WindowLobby.xaml.cs">
-      <DependentUpon>WindowLobby.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Page Include="Controller\WindowMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controller\WindowMain.xaml.cs">
+      <DependentUpon>WindowMain.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Domain\AlertManager.cs" />
     <Compile Include="Domain\CalendarManager.cs" />
     <Compile Include="Domain\Work.cs" />
@@ -101,6 +100,17 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Pictograms\close.png" />
+    <Resource Include="Resources\Pictograms\details.png" />
+    <Resource Include="Resources\Pictograms\minimize.png" />
+    <Resource Include="Resources\Pictograms\more.png" />
+    <Resource Include="Resources\Pictograms\search.png" />
+    <Resource Include="Resources\Pictograms\settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Pictograms\gear.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
