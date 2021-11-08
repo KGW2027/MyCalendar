@@ -13,7 +13,7 @@ namespace MyCalendar.Domain
     {
         private static CalendarManager instance;
 
-        public static CalendarManager getInstance()
+        public static CalendarManager GetInstance()
         {
             if(instance == null)
             {
@@ -67,11 +67,91 @@ namespace MyCalendar.Domain
             return JObject.Parse(File.ReadAllText(fileURL));
         }
 
+        public void AddCalendar(int year, int month, int day, Work work)
+        {
+            string fileURL = ParseFileURL((short)year, (short)month);
+            JObject calData = GetCalendarData(year, month);
+
+            JObject works = calData["Works"] as JObject;
+            JArray dayWorks = new JArray();
+            if (works.ContainsKey(day.ToString())) dayWorks = works[day.ToString()] as JArray;
+
+            JObject workData = work.GetJObject();
+            dayWorks.Add(workData);
+            calData["Works"][day.ToString()] = SortDailyWorks(dayWorks);
+
+            File.WriteAllText(fileURL, calData.ToString());
+            
+        }
+
         public int GetFirstDayOfMonth(int year, int month)
         {
             DayOfWeek dayOfWeek = new DateTime(year, month, 1).DayOfWeek;
             return (int)dayOfWeek;
         }
+
+        private JArray SortDailyWorks(JArray ja)
+        {
+            JArray sortResult = new JArray();
+            sortResult.Add(ja[0]);
+
+            /*
+             * Insert Sorting
+             * ja[i(++)]를 sortResult[j(--)]와 비교하면서 sortResult[j] < ja[i]인 지점에서 j+1에 ja[i]를 삽입
+             */
+            for (int i = 1; i < ja.Count; i++) 
+            {
+                int j = i - 1;
+                while(j >= 0 && Int32.Parse(sortResult[j]["StartTime"].ToString()) > Int32.Parse(ja[i]["StartTime"].ToString()))
+                {
+                    j--;
+                }
+                sortResult.Insert(j + 1, ja[i]);
+            }
+
+            return sortResult;
+        }
+
+        public Work GetClosestWorks(int year, int month)
+        {
+            JObject calData = CalendarManager.GetInstance().GetCalendarData(year, month);
+            JObject works = calData["Works"] as JObject;
+
+            foreach (JProperty property in works.Properties())
+            {
+                int calDay = Int32.Parse(property.Name);
+                JArray calDayWork = works[property.Name] as JArray;
+                foreach (Object obj in calDayWork)
+                {
+                    JObject calWorkData = obj as JObject;
+                    Work work = new Work(calDay, calWorkData);
+                    if (!work.IsOver())
+                    {
+                        return work;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public List<Work> GetDayWorks(int year, int month, int day)
+        {
+            List<Work> retVar = new List<Work>(); JObject calData = CalendarManager.GetInstance().GetCalendarData(year, month);
+            if (calData == null || !(calData["Works"] as JObject).ContainsKey(day.ToString())) return retVar;
+            JArray works = calData["Works"][day.ToString()] as JArray;
+            foreach(JToken work in works)
+            {
+                int startTime = Int32.Parse(work["StartTime"].ToString());
+                int endTime = Int32.Parse(work["EndTime"].ToString());
+                string desc = work["Description"].ToString();
+
+                retVar.Add(new Work(day, startTime, endTime, desc));
+            }
+
+            return retVar;
+        }
+
 
 
         private string ParseFileURL(short year, short month)

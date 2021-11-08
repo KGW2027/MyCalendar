@@ -7,8 +7,13 @@
 		<Style TargetType="{x:Type Label}" x:Key="DefaultFont">
 			<Setter Property="FontFamily" Value="/MyCalendar;component/Resources/#Yanolja Yache B"/>
 			<Setter Property="Foreground" Value="#FFFFFF"/>
-		</Style>
+        </Style>
         
+        <Style TargetType="{x:Type CheckBox}" x:Key="DefaultCheckbox">
+            <Setter Property="FontFamily" Value="/MyCalendar;component/Resources/#Yanolja Yache B"/>
+            <Setter Property="Foreground" Value="BLACK"/>
+        </Style>
+
         <Style TargetType="{x:Type Button}" x:Key="invisibleButton">
             <Setter Property="Background" Value="{x:Null}"/>
             <Setter Property="BorderBrush" Value="Transparent"/>

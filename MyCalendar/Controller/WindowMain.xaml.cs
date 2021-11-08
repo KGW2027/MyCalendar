@@ -23,6 +23,8 @@ namespace MyCalendar.Controller
     {
         private readonly Regex _numRegex = new Regex("[0-9]+");
         private Button _selectedButton;
+        private int year;
+        private int month;
 
         public WindowMain()
         {
@@ -55,7 +57,7 @@ namespace MyCalendar.Controller
             short year = short.Parse(Input_Year.Text);
             short month = short.Parse(Input_Month.Text);
 
-            bool success = CalendarManager.getInstance().CreateNewCalendar(year, month);
+            bool success = CalendarManager.GetInstance().CreateNewCalendar(year, month);
             InitializeCalendarList();
         }
         private void CheckNumber(object sender, TextCompositionEventArgs e)
@@ -87,7 +89,6 @@ namespace MyCalendar.Controller
         private void OpenDayCalendarDetails(object sender, RoutedEventArgs e)
         {
             Button clicked = sender as Button;
-            Console.WriteLine("Clicked -> " + clicked.Name);
             if(IsCalendarButton(clicked))
             {
                 string date = clicked.Name.Split('_')[2];
@@ -97,6 +98,25 @@ namespace MyCalendar.Controller
 
                 Console.WriteLine($"Clicked {year}-{month}-{day} Button");
             }
+        }
+
+        private void AddCalendar(object sender, RoutedEventArgs e)
+        {
+            if (year == null || month == null) return;
+
+            List<int> targets = GetTargetAddDays(year, month, GetSelectedAddDays());
+            int startTime = Int32.Parse(TB_Add_Calendar_Start_Hour.Text) * 60 + Int32.Parse(TB_Add_Calendar_Start_Minute.Text);
+            int endTime = Int32.Parse(TB_Add_Calendar_End_Hour.Text) * 60 + Int32.Parse(TB_Add_Calendar_End_Minute.Text);
+            string description = TB_Add_Calendar_Description.Text;
+
+            Console.WriteLine($"({year}/{month}M) [{startTime} to {endTime}] {description}");
+
+            foreach (int day in targets)
+            {
+                CalendarManager.GetInstance().AddCalendar(this.year, this.month, day, new Work(day, startTime, endTime, description));
+            }
+
+            LoadCalendar(year, month);
         }
 
         /*
@@ -113,14 +133,61 @@ namespace MyCalendar.Controller
             return num < 10 ? $"0{num}" : num.ToString();
         }
 
+        private bool IsCalendarButton(Button btn)
+        {
+            return btn.Name.StartsWith("Btn_Calendar");
+        }
+
+        private string CheckContentLength(string content, int maxLength)
+        {
+            if (content.Length > maxLength)
+            {
+                return content.Substring(0, maxLength - 1) + "...";
+            }
+            else
+            {
+                return content;
+            }
+        }
+
+        private List<int> GetSelectedAddDays()
+        {
+            List<int> days = new List<int>();
+
+            if (CB_Add_Calendar_Sunday.IsChecked.Value) days.Add(0);
+            if (CB_Add_Calendar_Monday.IsChecked.Value) days.Add(1);
+            if (CB_Add_Calendar_Tuesday.IsChecked.Value) days.Add(2);
+            if (CB_Add_Calendar_Wednsday.IsChecked.Value) days.Add(3);
+            if (CB_Add_Calendar_Thursday.IsChecked.Value) days.Add(4);
+            if (CB_Add_Calendar_Friday.IsChecked.Value) days.Add(5);
+            if (CB_Add_Calendar_Saturday.IsChecked.Value) days.Add(6);
+
+            return days;
+        }
+
+        private List<int> GetTargetAddDays(int year, int month, List<int> selected)
+        {
+            List<int> days = new List<int>();
+            DateTime date = new DateTime(year, month, 1);
+
+            while(date.Month == month)
+            {
+                if (selected.Contains((int)date.DayOfWeek)) days.Add(date.Day);
+                date = date.AddDays(1);
+            }
+
+            return days;
+        }
+
         /*
-         * Initiallize Methods
+         * Object Related Methods
          */
 
         private void InitializeCalendarList()
         {
+            Grid_Calendars_List.Children.Clear();
             Grid_Calendars_List.RowDefinitions.Clear();
-            string[] calendars = CalendarManager.getInstance().GetCalendars();
+            string[] calendars = CalendarManager.GetInstance().GetCalendars();
             int year = DateTime.Now.Year;
             int month = DateTime.Now.Month;
 
@@ -143,37 +210,6 @@ namespace MyCalendar.Controller
             }
         }
 
-        private List<Work> GetCloseWorks(int year, int month)
-        {
-            List<Work> retVar = new List<Work>();
-            JObject calData = CalendarManager.getInstance().GetCalendarData(year, month);
-            if (calData == null) return retVar;
-            JObject works = (JObject)calData["Works"];
-            int calDay = 1;
-            int overWorks = 0;
-
-            bool foundWorkData = false;
-
-            foreach (JProperty property in works.Properties())
-            {
-                calDay = Int32.Parse(property.Name);
-                JArray calDayWork = (JArray)works[property.Name];
-                foreach (Object obj in calDayWork)
-                {
-                    JObject calWorkData = (JObject)obj;
-                    Work work = new Work(calDay, calWorkData);
-                    if (!work.IsOver())
-                    {
-                        if(!foundWorkData) foundWorkData = true;
-                        retVar.Add(work);
-                    }
-                    else overWorks++;
-                }
-            }
-
-            return retVar;
-        }
-
         private void AddCalendarToList(int year, int month, int row)
         {
 
@@ -193,8 +229,10 @@ namespace MyCalendar.Controller
         private void LoadCalendar(int year, int month)
         {
             Label_Calendar_Title.Content = $"Calendar - [ {year} / {KeepTwoCharacters(month)} ] - ";
+            this.year = year;
+            this.month = month;
 
-            int firstColumn = CalendarManager.getInstance().GetFirstDayOfMonth(year, month);
+            int firstColumn = CalendarManager.GetInstance().GetFirstDayOfMonth(year, month);
             int lastDay = new DateTime(year, month, 1).AddMonths(1).AddDays(-1).Day;
             bool startDay = false;
             int day = 1;
@@ -252,31 +290,8 @@ namespace MyCalendar.Controller
             }
         }
 
-        private bool IsCalendarButton(Button btn)
-        {
-            return btn.Name.StartsWith("Btn_Calendar");
-        }
-
-        private string CheckContentLength(string content, int maxLength)
-        {
-            if(content.Length > maxLength)
-            {
-                return content.Substring(0, maxLength - 1) + "...";
-            }
-            else
-            {
-                return content;
-            }
-        }
-
-        private string GetClosestWorkString(List<Work> works)
-        {
-            if (works.Count == 0) return "예정된 일정이 없습니다.";
-            return $"{KeepTwoCharacters(works[0].GetDay())}일 {works[0].GetStartTime(true)} > {works[0].GetDescription()}";
-        }
-
         /*
-         * WPF Object Create
+         * Object Make Methods
          */
 
         private Grid CreateCalendarListData(int year, int month)
@@ -292,7 +307,11 @@ namespace MyCalendar.Controller
             title.Margin = new Thickness(5, 4, 99, 28);
 
             Label description = new Label();
-            description.Content = CheckContentLength(GetClosestWorkString(GetCloseWorks(year, month)), 20);
+            Work closest = CalendarManager.GetInstance().GetClosestWorks(year, month);
+            string message = closest == null
+                ? "예정된 일정이 없습니다."
+                : $"{KeepTwoCharacters(closest.GetDay())}일 {closest.GetStartTime(true)} > {closest.GetDescription()}";
+            description.Content = CheckContentLength(message, 20);
             description.Style = (Style)Application.Current.Resources["DefaultFont"];
             description.Foreground = new SolidColorBrush(Color.FromRgb(0x7f, 0x7f, 0x7f));
             description.FontSize = 18;
@@ -321,14 +340,6 @@ namespace MyCalendar.Controller
 
             return grid;
         }
-        
-            //<Grid Grid.Row="0" Grid.Column= "0" Height= "66" Width= "100" Background= "#B7C7E8" Margin= "1,0,0,1" >
-            //    < Border BorderBrush= "#FFB0C0E0" BorderThickness= "1" HorizontalAlignment= "Left" Height= "66" VerticalAlignment= "Top" Width= "100" />
-            //    < Label Content= "31" HorizontalAlignment= "Left" VerticalAlignment= "Top" Width= "28" FontSize= "16" FontWeight= "Bold" Height= "28" Margin= "-2,-5,0,0" />
-            //    < Label Content= "08:00 기상" Style= "{StaticResource DefaultFont}" Foreground= "Black" FontSize= "14" Margin= "-3,16,2,23" />
-            //    < Label Content= "09:00 Eng test" Style= "{StaticResource DefaultFont}" Foreground= "Black" FontSize= "14" Margin= "-3,31,2,10" />
-            //    < Label Content= "10:00 무엇을 적을까" Style= "{StaticResource DefaultFont}" Foreground= "Black" FontSize= "14" Margin= "-2,46,1,-4" />
-            //</ Grid >
 
         private Grid CreateDateNotTarget(DateTime date)
         {
@@ -358,32 +369,34 @@ namespace MyCalendar.Controller
             btn.Height = 66;
             btn.Click += OpenDayCalendarDetails;
 
+
+            List<Work> works = CalendarManager.GetInstance().GetDayWorks(date.Year, date.Month, date.Day);
+            if (works.Count > 0)
+            {
+                int workCount = 0;
+
+                foreach (Work work in works)
+                {
+                    if (work.GetDay() != date.Day) continue;
+                    if (workCount++ > 1) break;
+
+                    Label dayWork = new Label();
+                    dayWork.Style = (Style)Application.Current.Resources["DefaultFont"];
+                    dayWork.Foreground = new SolidColorBrush(Color.FromRgb(0xB3, 0xAD, 0x7B));
+                    dayWork.FontSize = 18;
+                    dayWork.Content = $"{work.GetStartTime(true)} {CheckContentLength(work.GetDescription(), 5)}";
+                    dayWork.Margin = new Thickness(-3, 24, 0, 16);
+                    if (workCount == 2)
+                    {
+                        dayWork.Margin = new Thickness(-3, 41, 0, 0);
+                    }
+                    grid.Children.Add(dayWork);
+                }
+            }
+
             grid.Children.Add(dayDate);
             grid.Children.Add(btn);
             grid.Children.Add(border);
-
-            List<Work> works = GetCloseWorks(date.Year, date.Month);
-            if (works.Count == 0) return grid;
-
-            int workCount = 0;
-
-            foreach(Work work in works)
-            {
-                if (work.GetDay() != date.Day) continue;
-                if (workCount++ > 1) break;
-
-                Label dayWork = new Label();
-                dayWork.Style = (Style)Application.Current.Resources["DefaultFont"];
-                dayWork.Foreground = new SolidColorBrush(Color.FromRgb(0xB3, 0xAD, 0x7B));
-                dayWork.FontSize = 18;
-                dayWork.Content = $"{work.GetStartTime(true)} {CheckContentLength(work.GetDescription(), 5)}";
-                dayWork.Margin = new Thickness(-3, 24, 0, 16);
-                if(workCount == 2)
-                {
-                    dayWork.Margin = new Thickness(-3, 41, 0, 0);
-                }
-                grid.Children.Add(dayWork);
-            }
 
             return grid;
         }
@@ -416,32 +429,35 @@ namespace MyCalendar.Controller
             btn.Height = 66;
             btn.Click += OpenDayCalendarDetails;
 
-            grid.Children.Add(dayDate);
-            grid.Children.Add(btn);
-            grid.Children.Add(border);
 
-            List<Work> works = GetCloseWorks(date.Year, date.Month);
-            if (works.Count == 0) return grid;
-
-            int workCount = 0;
-
-            foreach (Work work in works)
+            List<Work> works = CalendarManager.GetInstance().GetDayWorks(date.Year, date.Month, date.Day);
+            if (works.Count > 0)
             {
-                if (work.GetDay() != date.Day) continue;
-                if (workCount++ > 1) break;
+                int workCount = 0;
 
-                Label dayWork = new Label();
-                dayWork.Style = (Style)Application.Current.Resources["DefaultFont"];
-                dayWork.Foreground = new SolidColorBrush(Color.FromRgb(0xFF, 0xF8, 0xBD));
-                dayWork.FontSize = 18;
-                dayWork.Content = $"{work.GetStartTime(true)} {CheckContentLength(work.GetDescription(), 5)}";
-                dayWork.Margin = new Thickness(-3, 24, 0, 16);
-                if (workCount == 2)
+                foreach (Work work in works)
                 {
-                    dayWork.Margin = new Thickness(-3, 41, 0, 0);
+                    if (work.GetDay() != date.Day) continue;
+                    if (workCount++ > 1) break;
+
+                    Label dayWork = new Label();
+                    dayWork.Style = (Style)Application.Current.Resources["DefaultFont"];
+                    dayWork.Foreground = new SolidColorBrush(Color.FromRgb(0x00, 0x00, 0x0D));
+                    dayWork.FontSize = 18;
+                    dayWork.Content = $"{work.GetStartTime(true)} {CheckContentLength(work.GetDescription(), 5)}";
+                    dayWork.Margin = new Thickness(-3, 24, 0, 16);
+                    if (workCount == 2)
+                    {
+                        dayWork.Margin = new Thickness(-3, 41, 0, 0);
+                    }
+                    grid.Children.Add(dayWork);
                 }
-                grid.Children.Add(dayWork);
             }
+
+            grid.Children.Add(dayDate);
+            grid.Children.Add(border);
+            grid.Children.Add(btn);
+
 
             return grid;
 

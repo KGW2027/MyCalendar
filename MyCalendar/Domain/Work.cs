@@ -68,6 +68,16 @@ namespace MyCalendar.Domain
             return (day > _day) || (day == _day && time > _startTime);
         }
 
+        public JObject GetJObject()
+        {
+            JObject jo = new JObject();
+            jo["StartTime"] = _startTime;
+            jo["EndTime"] = _endTime;
+            jo["Description"] = _desc;
+
+            return jo;
+        }
+
         private String GetHour(int val)
         {
             return KeepTwoCharacters(val/60);
