@@ -22,6 +22,7 @@ namespace MyCalendar.Controller
     public partial class WindowMain : Window
     {
         private readonly Regex _numRegex = new Regex("[0-9]+");
+        private Button _selectedButton;
 
         public WindowMain()
         {
@@ -67,6 +68,13 @@ namespace MyCalendar.Controller
             Button clicked = sender as Button;
             if(clicked.Name.StartsWith("Btn_Calendar_"))
             {
+                if(_selectedButton != null)
+                {
+                    _selectedButton.Opacity = 0.01f;
+                }
+                clicked.Opacity = 0.08f;
+                _selectedButton = clicked;
+
                 string date = clicked.Name.Split('_')[2];
                 int year = Int32.Parse(date.Split('Y')[0]);
                 int month = Int32.Parse(date.Split('Y')[1].Split('M')[0]);
@@ -175,6 +183,7 @@ namespace MyCalendar.Controller
 
             Button btn = new Button();
             btn.Name = $"Btn_Calendar_{year}Y{KeepTwoCharacters(month)}M";
+            btn.Background = new SolidColorBrush(Color.FromRgb(0x00, 0x00, 0x00));
             btn.Opacity = 0.01f;
             btn.Width = 225;
             btn.Height = 60;
