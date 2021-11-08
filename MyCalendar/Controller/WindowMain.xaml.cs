@@ -72,7 +72,7 @@ namespace MyCalendar.Controller
                 {
                     _selectedButton.Opacity = 0.01f;
                 }
-                clicked.Opacity = 0.08f;
+                clicked.Opacity = 0.35f;
                 _selectedButton = clicked;
 
                 string date = clicked.Name.Split('_')[2];
@@ -135,6 +135,7 @@ namespace MyCalendar.Controller
             Work work = null;
             int calDay = 1;
             int overWorks = 0;
+            bool foundWorkData = false;
 
             foreach (JProperty property in works.Properties())
             {
@@ -146,13 +147,15 @@ namespace MyCalendar.Controller
                     work = new Work(calDay, calWorkData);
                     if (!work.IsOver())
                     {
+                        foundWorkData = true;
                         break;
                     }
                     else overWorks++;
                 }
+                if (foundWorkData) break;
             }
 
-            if (work == null) return "예정된 일정이 없습니다.";
+            if (work == null || !foundWorkData) return "예정된 일정이 없습니다.";
 
             return $"{KeepTwoCharacters(calDay)}일 {work.GetStartTime(true)} > {work.GetDescription()}";
         }
@@ -183,7 +186,7 @@ namespace MyCalendar.Controller
 
             Button btn = new Button();
             btn.Name = $"Btn_Calendar_{year}Y{KeepTwoCharacters(month)}M";
-            btn.Background = new SolidColorBrush(Color.FromRgb(0x00, 0x00, 0x00));
+            btn.Background = new SolidColorBrush(Color.FromRgb(0xFF, 0xFF, 0xFF));
             btn.Opacity = 0.01f;
             btn.Width = 225;
             btn.Height = 60;
