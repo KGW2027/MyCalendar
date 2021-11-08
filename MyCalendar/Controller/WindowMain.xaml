@@ -14,7 +14,8 @@
             BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="50" VerticalAlignment="Top" Width="953" PreviewMouseLeftButtonDown="MoveWindow"/>
 
         <Border CornerRadius="0, 0, 15, 15" Background="#FFD6D9FF"
-            BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="490" VerticalAlignment="Top" Width="953" Margin="0,46,0,0" Grid.RowSpan="2"/>
+            BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="490" VerticalAlignment="Top" Width="953" Margin="0,46,0,0" Grid.RowSpan="2">
+        </Border>
 
         <Button Style="{StaticResource ResourceKey=invisibleButton}" HorizontalAlignment="Left" Height="50" VerticalAlignment="Top" Width="45" Margin="908,0,0,0" Click="ShutdownWindow">
             <Image Source="./../Resources/Pictograms/close.png" Height="24" Width="24"/>
@@ -50,7 +51,7 @@
         <Border BorderBrush="Black" CornerRadius="10, 10, 10, 10" Background="#FFCBCEF2"
                 BorderThickness="1" HorizontalAlignment="Left" Height="306" Margin="10,106,0,0" VerticalAlignment="Top" Width="225" Grid.RowSpan="2">
             <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
-                <Grid Name="Grid_Calendars">
+                <Grid Name="Grid_Calendars_List">
                 </Grid>
             </ScrollViewer>
         </Border>
@@ -99,7 +100,22 @@
         <Label Name="Label_Calendar_Title" Content="Calendar - [ 2021 / 11 ] -" Style="{StaticResource DefaultFont}" FontSize="28"
                HorizontalAlignment="Left" Height="40" Margin="456,62,0,0" VerticalAlignment="Top" Width="308"/>
 
-        <Grid HorizontalAlignment="Left" Height="329" Margin="242,101,0,0" VerticalAlignment="Top" Width="700" Grid.RowSpan="2"/>
+        <Grid Name="Grid_Calendar" HorizontalAlignment="Left" Height="329" Margin="242,101,0,0" VerticalAlignment="Top" Width="700" Grid.RowSpan="2">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="66"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Row="0" Grid.Column="0" Height="66" Width="100" Background="#C7D7F8" Margin="1,0,0,1">
+                <Border BorderBrush="#FF90A0C0" BorderThickness="1" HorizontalAlignment="Left" Height="66" VerticalAlignment="Top" Width="100"/>
+                <Label Content="31" Foreground="#666666" HorizontalAlignment="Left" VerticalAlignment="Top" Width="31" FontSize="19" FontWeight="Bold" Height="31" Margin="-2,-5,0,0"/>
+                <Label Content="08:00 기상" Style="{StaticResource DefaultFont}" Foreground="#FFF8BD" FontSize="18" Margin="-3,24,0,16" />
+                <Label Content="09:00 컴퓨터구조" Style="{StaticResource DefaultFont}" Foreground="#FFF8BD" FontSize="18" Margin="-3,41,0,0"/>
+            </Grid>
+        </Grid>
 
 
     </Grid>

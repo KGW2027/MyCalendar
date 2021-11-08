@@ -67,6 +67,12 @@ namespace MyCalendar.Domain
             return JObject.Parse(File.ReadAllText(fileURL));
         }
 
+        public int GetFirstDayOfMonth(int year, int month)
+        {
+            DayOfWeek dayOfWeek = new DateTime(year, month, 1).DayOfWeek;
+            return (int)dayOfWeek;
+        }
+
 
         private string ParseFileURL(short year, short month)
         {
