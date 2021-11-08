@@ -68,9 +68,9 @@ namespace MyCalendar.Controller
         private void ChangeViewCalendar(object sender, RoutedEventArgs e)
         {
             Button clicked = sender as Button;
-            if(IsCalendarButton(clicked))
+            if (IsCalendarButton(clicked))
             {
-                if(_selectedButton != null)
+                if (_selectedButton != null)
                 {
                     _selectedButton.Opacity = 0.01f;
                 }
@@ -89,7 +89,7 @@ namespace MyCalendar.Controller
         private void OpenDayCalendarDetails(object sender, RoutedEventArgs e)
         {
             Button clicked = sender as Button;
-            if(IsCalendarButton(clicked))
+            if (IsCalendarButton(clicked))
             {
                 string date = clicked.Name.Split('_')[2];
                 int year = Int32.Parse(date.Split('Y')[0]);
@@ -104,19 +104,43 @@ namespace MyCalendar.Controller
         {
             if (year == null || month == null) return;
 
-            List<int> targets = GetTargetAddDays(year, month, GetSelectedAddDays());
             int startTime = Int32.Parse(TB_Add_Calendar_Start_Hour.Text) * 60 + Int32.Parse(TB_Add_Calendar_Start_Minute.Text);
             int endTime = Int32.Parse(TB_Add_Calendar_End_Hour.Text) * 60 + Int32.Parse(TB_Add_Calendar_End_Minute.Text);
             string description = TB_Add_Calendar_Description.Text;
 
-            Console.WriteLine($"({year}/{month}M) [{startTime} to {endTime}] {description}");
-
-            foreach (int day in targets)
+            if (CB_Add_Calendar_Mode.IsChecked.Value)
             {
+                int day = Int32.Parse(TB_Add_Calendar_Day.Text);
                 CalendarManager.GetInstance().AddCalendar(this.year, this.month, day, new Work(day, startTime, endTime, description));
+            }
+            else
+            {
+                List<int> targets = GetTargetAddDays(year, month, GetSelectedAddDays());
+                foreach (int day in targets)
+                {
+                    CalendarManager.GetInstance().AddCalendar(this.year, this.month, day, new Work(day, startTime, endTime, description));
+                }
             }
 
             LoadCalendar(year, month);
+        }
+
+        private void ChangeAddCalendarCheckbox(object sender, RoutedEventArgs e)
+        {
+            CheckBox box = sender as CheckBox;
+
+            CB_Add_Calendar_Sunday.Visibility = box.IsChecked.Value ? Visibility.Collapsed : Visibility.Visible;
+            CB_Add_Calendar_Monday.Visibility = box.IsChecked.Value ? Visibility.Collapsed : Visibility.Visible;
+            CB_Add_Calendar_Tuesday.Visibility = box.IsChecked.Value ? Visibility.Collapsed : Visibility.Visible;
+            CB_Add_Calendar_Wednsday.Visibility = box.IsChecked.Value ? Visibility.Collapsed : Visibility.Visible;
+            CB_Add_Calendar_Thursday.Visibility = box.IsChecked.Value ? Visibility.Collapsed : Visibility.Visible;
+            CB_Add_Calendar_Friday.Visibility = box.IsChecked.Value ? Visibility.Collapsed : Visibility.Visible;
+            CB_Add_Calendar_Saturday.Visibility = box.IsChecked.Value ? Visibility.Collapsed : Visibility.Visible;
+
+            TB_Add_Calendar_Day.Visibility = box.IsChecked.Value ? Visibility.Visible : Visibility.Collapsed;
+            TB_Add_Calendar_Day_Label.Visibility = box.IsChecked.Value ? Visibility.Visible : Visibility.Collapsed;
+
+
         }
 
         /*
@@ -170,7 +194,7 @@ namespace MyCalendar.Controller
             List<int> days = new List<int>();
             DateTime date = new DateTime(year, month, 1);
 
-            while(date.Month == month)
+            while (date.Month == month)
             {
                 if (selected.Contains((int)date.DayOfWeek)) days.Add(date.Day);
                 date = date.AddDays(1);
@@ -199,7 +223,7 @@ namespace MyCalendar.Controller
                 int dataYear = Int16.Parse(dataSplit[0].Split('(')[1]);
                 int dataMonth = Int16.Parse(dataSplit[1].Split(')')[0]);
 
-                if(!Check_Past.IsChecked.Value)
+                if (!Check_Past.IsChecked.Value)
                 {
                     if (dataYear < year) continue; // 이미 연도가 지난 경우
                     if (dataYear == year && dataMonth < month) continue; // 같은 연도지만 월이 지난 경우
@@ -239,13 +263,13 @@ namespace MyCalendar.Controller
 
             ResetCalendarGrid();
 
-            for(int row = 0; row < 5; row++)
+            for (int row = 0; row < 5; row++)
             {
                 for (int col = 0; col < 7; col++)
                 {
                     Grid grid = null;
                     if (row == 0 && col == firstColumn) startDay = true;
-                    if(startDay)
+                    if (startDay)
                     {
                         grid = CreateDate(new DateTime(year, month, day++));
                         if (day > lastDay) startDay = false;
@@ -270,7 +294,7 @@ namespace MyCalendar.Controller
             Grid_Calendar.RowDefinitions.Clear();
             Grid_Calendar.ColumnDefinitions.Clear();
 
-            int height = 66; 
+            int height = 66;
             int width = 100;
 
             for (int row = 0; row < 5; row++)
@@ -464,6 +488,5 @@ namespace MyCalendar.Controller
         }
 
     }
-
 
 }

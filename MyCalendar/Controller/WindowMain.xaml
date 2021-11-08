@@ -106,6 +106,7 @@
 
         <!-- Option Grids -->
         <Grid Name="Grid_Add_Calendar" HorizontalAlignment="Left" Height="59" Margin="244,468,0,0" VerticalAlignment="Top" Width="700" IsEnabled="True">
+
             <CheckBox Name="CB_Add_Calendar_Sunday" Content="일요일" Style="{StaticResource DefaultCheckbox}" FontSize="18" HorizontalAlignment="Left" Margin="240,10,0,0" VerticalAlignment="Top"/>
             <CheckBox Name="CB_Add_Calendar_Monday" Content="월요일" Style="{StaticResource ResourceKey=DefaultCheckbox}" FontSize="18" HorizontalAlignment="Left" Margin="295,10,0,0" VerticalAlignment="Top"/>
             <CheckBox Name="CB_Add_Calendar_Tuesday" Content="화요일" Style="{StaticResource ResourceKey=DefaultCheckbox}" FontSize="18" HorizontalAlignment="Left" Margin="350,10,0,0" VerticalAlignment="Top"/>
@@ -113,6 +114,10 @@
             <CheckBox Name="CB_Add_Calendar_Thursday" Content="목요일" Style="{StaticResource ResourceKey=DefaultCheckbox}" FontSize="18" HorizontalAlignment="Left" Margin="460,10,0,0" VerticalAlignment="Top"/>
             <CheckBox Name="CB_Add_Calendar_Friday" Content="금요일" Style="{StaticResource ResourceKey=DefaultCheckbox}" FontSize="18" HorizontalAlignment="Left" Margin="515,10,0,0" VerticalAlignment="Top"/>
             <CheckBox Name="CB_Add_Calendar_Saturday" Content="토요일" Style="{StaticResource ResourceKey=DefaultCheckbox}" FontSize="18" HorizontalAlignment="Left" Margin="570,10,0,0" VerticalAlignment="Top"/>
+
+            <TextBox Style="{StaticResource DefaultTextBox}" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" TextWrapping="NoWrap" Background="{x:Null}" Margin="244,6,421,31"
+                x:Name="TB_Add_Calendar_Day" Text="1" FontSize="18" BorderBrush="Black" PreviewTextInput="CheckNumber" Visibility="Collapsed"/>
+            <Label Name="TB_Add_Calendar_Day_Label" Content="일" Style="{StaticResource DefaultFont}" Foreground="Black" FontSize="18" Margin="275,8,405,25" Visibility="Collapsed"/>
 
             <Label Content="시작 시간(0~23시)" Style="{StaticResource DefaultFont}" Foreground="Black" FontSize="16" Margin="13,4,582,30"/>
             <TextBox Style="{StaticResource DefaultTextBox}" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" TextWrapping="NoWrap" Background="{x:Null}" Margin="15,27,650,10"
@@ -136,8 +141,8 @@
 
             <Border BorderBrush="Black" BorderThickness="1" Margin="486,32,77,5" CornerRadius="10" Background="#FFBBBEE2"/>
             <Button Content="일정 생성" Style="{StaticResource invisibleButton}" FontSize="18"  Margin="486,32,77,5" Click="AddCalendar"/>
-            
-            <CheckBox x:Name="CB_Add_Calendar_isBulk" Content="직접입력" Style="{StaticResource ResourceKey=DefaultCheckbox}" FontSize="18" HorizontalAlignment="Left" Margin="628,19,0,0" VerticalAlignment="Top" Checked="ChangeAddCalendarCheckbox"/>
+
+            <CheckBox x:Name="CB_Add_Calendar_Mode" Content="직접입력" Style="{StaticResource ResourceKey=DefaultCheckbox}" FontSize="18" HorizontalAlignment="Left" Margin="628,19,0,0" VerticalAlignment="Top" Checked="ChangeAddCalendarCheckbox" Unchecked="ChangeAddCalendarCheckbox"/>
         </Grid>
 
     </Grid>
