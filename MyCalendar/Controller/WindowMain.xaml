@@ -40,14 +40,6 @@
             HorizontalAlignment="Left" Height="41" Margin="52,60,0,0" TextWrapping="NoWrap" Text="검색: 일정 명, 연도, 시간" VerticalAlignment="Top" Width="183"/>
 
         <!-- Calendar List -->
-        <!--
-            <Grid HorizontalAlignment="Left" Height="60" VerticalAlignment="Top" Width="225">
-                <Label Content="2021. 11." Style="{StaticResource DefaultFont}" Foreground="Black" FontSize="18" Margin="5,4,99,28"/>
-                <Label Content="11. 06 &gt; 08:00 Maximum 10 char" Style="{StaticResource ResourceKey=DefaultFont}" Foreground="#FF7F7F7F" FontSize="18" Margin="10,23,10,10"/>
-                <Button Style="{StaticResource invisibleButton}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="225" Height="60"/>
-                <Border CornerRadius="5, 5, 5, 5" Background="#FF7F7F7F" BorderBrush="{x:Null}" BorderThickness="1" HorizontalAlignment="Left" Height="5" Margin="5,55,0,0" VerticalAlignment="Top" Width="215"/>
-            </Grid>
-        -->
         <Border BorderBrush="Black" CornerRadius="10, 10, 10, 10" Background="#FFCBCEF2"
                 BorderThickness="1" HorizontalAlignment="Left" Height="306" Margin="10,106,0,0" VerticalAlignment="Top" Width="225" Grid.RowSpan="2">
             <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">

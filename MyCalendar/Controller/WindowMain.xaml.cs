@@ -96,13 +96,14 @@ namespace MyCalendar.Controller
                 int month = Int32.Parse(date.Split('Y')[1].Split('M')[0]);
                 int day = Int32.Parse(date.Split('M')[1].Split('D')[0]);
 
-                Console.WriteLine($"Clicked {year}-{month}-{day} Button");
+                WindowDayDetails wdd = new WindowDayDetails(year, month, day);
+                wdd.Show();
             }
         }
 
         private void AddCalendar(object sender, RoutedEventArgs e)
         {
-            if (year == null || month == null) return;
+            if (year == 0 || month == 0) return;
 
             int startTime = Int32.Parse(TB_Add_Calendar_Start_Hour.Text) * 60 + Int32.Parse(TB_Add_Calendar_Start_Minute.Text);
             int endTime = Int32.Parse(TB_Add_Calendar_End_Hour.Text) * 60 + Int32.Parse(TB_Add_Calendar_End_Minute.Text);
