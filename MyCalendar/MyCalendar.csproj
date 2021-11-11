@@ -79,6 +79,7 @@
       <DependentUpon>WindowMain.xaml</DependentUpon>
     </Compile>
     <Compile Include="Domain\AlertManager.cs" />
+    <Compile Include="Domain\Area.cs" />
     <Compile Include="Domain\CalendarManager.cs" />
     <Compile Include="Domain\Work.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

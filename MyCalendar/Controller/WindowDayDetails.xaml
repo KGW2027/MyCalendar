@@ -29,9 +29,7 @@
         <!-- Schedule Bar -->
         <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="332" Margin="0, 49, 0, 0" VerticalAlignment="Top" Width="475">
             <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled" Margin="0,0,0,0">
-                <Grid Name="Grid_Schedules" Height="2900" Width="475">
-
-                </Grid>
+                <Grid Name="Grid_Schedules" Height="2900" Width="475"/>
             </ScrollViewer>
         </Border>
 

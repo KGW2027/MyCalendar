@@ -153,12 +153,36 @@ namespace MyCalendar.Controller
             return star.ToString() == staredColor.ToString();
         }
 
+        private Thickness CalculateMargin(int startY, int duration)
+        {
+            int leftTerm = 10;
+            int gridWidth = 100;
+            double windowHeight = Grid_Schedules.Height;
+            double windowWidth = Grid_Schedules.Width;
+
+            int line = 0;
+            int bottom = (int)windowHeight - (startY + duration);
+
+            while(Area.GetInstance().CheckClaim(startY, bottom, line) && line < 3)
+            {
+                line++;
+            }
+
+            int left = leftTerm + (line * 100);
+            int right = (int)windowWidth - (gridWidth + left);
+
+            Area.GetInstance().ClaimArea(startY, bottom, duration, line);
+
+            return new Thickness(left, startY, right, bottom);
+        }
+
         /*
          * WPF Object Methods
          */
 
         private void UpdateSchedules(int year, int month, int day)
         {
+            Area.GetInstance().ResetClaim();
             InitializeGraph();
             InitializeWorks(year, month, day);
             ToggleInfoStatus(Visibility.Collapsed);
@@ -197,7 +221,6 @@ namespace MyCalendar.Controller
         {
             List<Work> workList = CalendarManager.GetInstance().GetDayWorks(year, month, day);
 
-            int leftTerm = 20;
             int gridWidth = 100;
             double windowHeight = Grid_Schedules.Height;
             double windowWidth = Grid_Schedules.Width;
@@ -211,7 +234,7 @@ namespace MyCalendar.Controller
 
                 Grid workGrid = new Grid();
                 workGrid.Height = duration; workGrid.Width = gridWidth;
-                workGrid.Margin = new Thickness(leftTerm, startY, windowWidth - (gridWidth + leftTerm), windowHeight - (startY+duration));
+                workGrid.Margin = CalculateMargin(startY, duration);
 
                 Border border = new Border();
                 border.CornerRadius = new CornerRadius(10.0D);
