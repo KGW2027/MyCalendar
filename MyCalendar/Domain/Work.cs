@@ -10,7 +10,8 @@ namespace MyCalendar.Domain
     class Work
     {
         int _day, _startTime, _endTime;
-        string _desc;
+        string _desc, _memo;
+        bool _stared;
 
         public Work(int day, int startTime, int endTime, string description)
         {
@@ -26,6 +27,9 @@ namespace MyCalendar.Domain
             _startTime = Int32.Parse(workData["StartTime"].ToString());
             _endTime = Int32.Parse(workData["EndTime"].ToString());
             _desc = workData["Description"].ToString();
+            _memo = workData["Memo"].ToString();
+            _stared = workData["IsStared"].ToObject<bool>();
+
         }
 
         public int GetDay()
@@ -74,8 +78,20 @@ namespace MyCalendar.Domain
             jo["StartTime"] = _startTime;
             jo["EndTime"] = _endTime;
             jo["Description"] = _desc;
+            jo["IsStared"] = _stared;
+            jo["Memo"] = _memo;
 
             return jo;
+        }
+
+        public string GetMemo()
+        {
+            return _memo;
+        }
+
+        public bool GetStared()
+        {
+            return _stared;
         }
 
         private String GetHour(int val)

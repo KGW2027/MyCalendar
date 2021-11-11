@@ -77,11 +77,30 @@ namespace MyCalendar.Domain
             if (works.ContainsKey(day.ToString())) dayWorks = works[day.ToString()] as JArray;
 
             JObject workData = work.GetJObject();
+            workData["IsStared"] = false;
+            workData["Memo"] = "메모를 입력할 수 있습니다.";
+            
             dayWorks.Add(workData);
             calData["Works"][day.ToString()] = SortDailyWorks(dayWorks);
 
             File.WriteAllText(fileURL, calData.ToString());
             
+        }
+
+        public void UpdateCalendar(int year, int month, int day, int key, JObject jo)
+        {
+            string fileURL = ParseFileURL((short)year, (short)month);
+            JObject calData = GetCalendarData(year, month);
+            if (jo != null)
+            {
+                calData["Works"][day.ToString()][key] = jo;
+            } 
+            else
+            {
+                calData["Works"][day.ToString()][key].Remove();
+            }
+
+            File.WriteAllText(fileURL, calData.ToString());
         }
 
         public int GetFirstDayOfMonth(int year, int month)
@@ -142,11 +161,7 @@ namespace MyCalendar.Domain
             JArray works = calData["Works"][day.ToString()] as JArray;
             foreach(JToken work in works)
             {
-                int startTime = Int32.Parse(work["StartTime"].ToString());
-                int endTime = Int32.Parse(work["EndTime"].ToString());
-                string desc = work["Description"].ToString();
-
-                retVar.Add(new Work(day, startTime, endTime, desc));
+                retVar.Add(new Work(day, work as JObject));
             }
 
             return retVar;

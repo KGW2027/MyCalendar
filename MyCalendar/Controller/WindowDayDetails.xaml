@@ -18,21 +18,54 @@
         </Button>
 
         <!-- Body Bar -->
-        <Border CornerRadius="0, 0, 15, 15" Background="#FFD6D9FF"
-            BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="490" VerticalAlignment="Top" Width="475" Margin="0,49,0,0">
+        <Border CornerRadius="0, 0, 0, 0" Background="#FFD6D9FF"
+            BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="340" VerticalAlignment="Top" Width="475" Margin="0,49,0,0">
+        </Border>
+
+        <Border CornerRadius="0, 0, 15, 15" Background="#FFBBBEE2"
+            BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="158" VerticalAlignment="Top" Width="475" Margin="0,381,0,0">
         </Border>
 
         <!-- Schedule Bar -->
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="490" Margin="0, 49, 0, 0" VerticalAlignment="Top" Width="280">
-            <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" Height="1000" Margin="0, 0, 0, 0">
-                <Grid Name="Border_Schedules">
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="332" Margin="0, 49, 0, 0" VerticalAlignment="Top" Width="475">
+            <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled" Margin="0,0,0,0">
+                <Grid Name="Grid_Schedules" Height="2900" Width="475">
 
                 </Grid>
             </ScrollViewer>
         </Border>
 
         <!-- Schedule Info Bar -->
-        <Grid Name="Border_Schedules_Info" HorizontalAlignment="Left" Height="490" Margin="270,50,0,0" VerticalAlignment="Top" Width="205"/>
+        <Grid Name="Border_Schedules_Info" HorizontalAlignment="Left" Height="158" Margin="0,381,0,0" VerticalAlignment="Top" Width="475">
+            <Label Name="Label_Info_001" Content="일정 시작 시간 : " Style="{StaticResource DefaultFont}" Foreground="Black" FontSize="20" HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top"/>
+            <Label Name="Label_Info_002" Content="일정 종료 시간 : " Style="{StaticResource DefaultFont}" Foreground="Black" FontSize="20" HorizontalAlignment="Left" Margin="5,31,0,0" VerticalAlignment="Top"/>
+            <Label Name="Label_Info_003" Content="일정 : " Style="{StaticResource DefaultFont}" Foreground="Black" FontSize="20" HorizontalAlignment="Left" Margin="5,57,0,0" VerticalAlignment="Top"/>
+
+            <Label Name="Label_Info_Starttime" Content="00시 00분" Style="{StaticResource DefaultFont}" Foreground="Black" FontSize="20" HorizontalAlignment="Left" Margin="102,5,0,0" VerticalAlignment="Top" Width="100"/>
+            <Label Name="Label_Info_Endtime" Content="00시 00분" Style="{StaticResource DefaultFont}" Foreground="Black" FontSize="20" HorizontalAlignment="Left" Margin="101,31,0,0" VerticalAlignment="Top" Width="100"/>
+            <Label x:Name="Label_Info_Description" Content="00시 00분" Style="{StaticResource DefaultFont}" Foreground="Black" FontSize="20" HorizontalAlignment="Left" Margin="43,57,0,0" VerticalAlignment="Top" Width="420"/>
+
+            <TextBox Name="Textbox_Info_Memo" Background="#FFBBBEE2" Text="메모를 입력해주세요." FontFamily="/MyCalendar;component/Resources/#Yanolja Yache B" FontSize="21"
+                     BorderBrush="Black"
+                     HorizontalAlignment="Left" Height="58" Margin="10,87,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="453"/>
+
+            <!-- Star Button -->
+            <Border Name="Border_Info_Star" CornerRadius="10" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="30" Margin="263,5,0,0" VerticalAlignment="Top" Width="100" Background="#FFBBBEE2"/>
+            <Label x:Name="Label_Info_Star" Content="중요 표시" Style="{StaticResource DefaultFont}" Foreground="Black" FontSize="20" HorizontalAlignment="Left" Margin="291,5,0,0" VerticalAlignment="Top" Width="70"/>
+            <Polygon xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     Name="Poly_Info_Star" Points="12,0, 14.6,8.5 23.2,8.5 16.3,13.5 19,21.6 12,16.5 5,21.6 7.7,13.5 0.8,8.5 9.4, 8.5"
+                     Fill="#FFCBCEF2" 
+                     Stroke="Black" StrokeThickness="0.5" Margin="267,8,181,118" />
+            <Button Name="Btn_Info_Star" Style="{StaticResource invisibleButton}" HorizontalAlignment="Left" Margin="263,5,0,0" VerticalAlignment="Top" Width="98" Height="30" Click="ToggleStarStatus"/>
+
+            <!-- Delete Button -->
+            <Border Name="Border_Info_Delete" CornerRadius="10" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="30" Margin="368,5,0,0" VerticalAlignment="Top" Width="100" Background="#FFFFBEE2"/>
+            <Label x:Name="Label_Info_Delete" Content="삭제" Style="{StaticResource DefaultFont}" Foreground="Black" FontSize="20" HorizontalAlignment="Left" Margin="398,5,0,0" VerticalAlignment="Top" Width="70"/>
+            <Button x:Name="Btn_Info_Delete" Style="{StaticResource invisibleButton}" HorizontalAlignment="Left" Margin="369,5,0,0" VerticalAlignment="Top" Width="98" Height="30" Click="RemoveThisSchedule"/>
+
+
+        </Grid>
 
     </Grid>
 </Window>

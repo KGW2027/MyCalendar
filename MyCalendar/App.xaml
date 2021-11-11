@@ -34,6 +34,15 @@
             </Style.Triggers>
         </Style>
 
+        <Style TargetType="{x:Type TextBlock}" x:Key="ScheduleBlock">
+            <Setter Property="FontFamily" Value="/MyCalendar;component/Resources/#Yanolja Yache B"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+        </Style>
+
         <Style TargetType="{x:Type TextBox}" x:Key="DefaultTextBox">
             <Setter Property="FontFamily" Value="/MyCalendar;component/Resources/#Yanolja Yache B"/>
             <Setter Property="Template">
