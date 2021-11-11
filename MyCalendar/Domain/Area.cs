@@ -39,8 +39,8 @@ namespace MyCalendar.Domain
             {
                 if (claim.line != line) continue;
 
-                if (claim.start < start && start <= claim.start + claim.size) return true;
-                if (claim.end < end && end <= claim.end + claim.size) return true;
+                if (claim.start <= start && start <= claim.start + claim.size) return true;
+                if (claim.end <= end && end <= claim.end + claim.size) return true;
             }
 
             return false;

@@ -68,6 +68,13 @@ namespace MyCalendar.Controller
         private void LoadInfo(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
+            if (_enableInfo != null)
+            {
+                int[] infos = ParseEnableInfo();
+                UpdateInfo();
+                UpdateSchedules(infos[0], infos[1], infos[2]);
+            }
+
             _enableInfo = btn;
 
             int[] keys = ParseEnableInfo();
@@ -239,11 +246,12 @@ namespace MyCalendar.Controller
                 Border border = new Border();
                 border.CornerRadius = new CornerRadius(10.0D);
                 border.BorderBrush = new SolidColorBrush(Color.FromRgb(0x00, 0x00, 0x00));
-                if(work.GetStared())
+                border.BorderThickness = new Thickness(1.0D);
+                if (work.GetStared())
                 {
                     border.BorderBrush = new SolidColorBrush(Color.FromRgb(0x7D, 0x00, 0xFF));
+                    border.BorderThickness = new Thickness(2.0D);
                 }
-                border.BorderThickness = new Thickness(1.0D);
                 border.Background = GetColorNow();
 
                 TextBlock label = new TextBlock();
