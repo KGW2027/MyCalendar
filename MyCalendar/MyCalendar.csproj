@@ -119,8 +119,5 @@
   <ItemGroup>
     <Resource Include="Resources\Pictograms\gear.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Resource Include="starVector.png" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
