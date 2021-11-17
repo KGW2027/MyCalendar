@@ -6,9 +6,10 @@
         xmlns:local="clr-namespace:MyCalendar.Controller"
         Icon="../Resources/Icon/Index.ico"
         mc:Ignorable="d"
-        Title="MSC" Height="810" Width="1430" WindowStyle="None" AllowsTransparency="True" Background="{x:Null}">
+        Title="MSC" Height="810" Width="1324" WindowStyle="None" AllowsTransparency="True" Background="{x:Null}">
 
     <Grid>
+
 
         <!-- Title Bar -->
         <Border CornerRadius="15, 15, 0, 0" Background="#FFF9F9F9"
@@ -23,18 +24,18 @@
         <Button Style="{StaticResource ResourceKey=invisibleButton}" HorizontalAlignment="Left" Height="50" VerticalAlignment="Top" Width="45" Margin="1174,-4,0,0" Click="MinimizeWindow">
             <Image Source="./../Resources/Pictograms/minimize.png" Height="24" Width="24"/>
         </Button>
-        <Button Style="{StaticResource ResourceKey=invisibleButton}" HorizontalAlignment="Left" Height="50" VerticalAlignment="Top" Width="52" Margin="0,0,0,0">
-            <Image Source="./../Resources/Pictograms/gear.png" Height="44" Width="40"/>
+        <Button Style="{StaticResource ResourceKey=invisibleButton}" HorizontalAlignment="Left" Height="50" VerticalAlignment="Top" Width="52" Margin="0,-2,0,0" Click="ToggleOption">
+            <Image Source="./../Resources/Pictograms/gear.png" Height="46" Width="40"/>
         </Button>
 
-        <Label Content="MSC" Margin="672,-15,674,776" FontFamily="Calibri" FontSize="40" Foreground="#FF8A92FF" FontWeight="Bold"/>
-        <Label Content="My Schedule Calendar" Margin="629,22,629,760" FontFamily="Calibri" FontSize="18" Foreground="#FF454980"/>
+        <Label Content="MSC" Margin="616,-14,615,774" FontFamily="Calibri" FontSize="40" Foreground="#FF8A92FF" FontWeight="Bold"/>
+        <Label Content="My Schedule Calendar" Margin="575,22,576,760" FontFamily="Calibri" FontSize="18" Foreground="#FF454980"/>
 
         <!-- Content -->
         <!-- Search -->
         <Border CornerRadius="10, 10, 10, 10" Background="#FFCBCEF2"
             BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="60" Margin="10,60,0,0" VerticalAlignment="Top" Width="340"/>
-        <Image Source="./../Resources/Pictograms/search.png" Margin="11,61,1362,690" Width="60" Height="60"/>
+        <Image Source="./../Resources/Pictograms/search.png" Margin="11,61,1253,690" Width="60"/>
         <TextBox Name="Input_Search" Style="{StaticResource DefaultTextBox}" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="30" 
                  Foreground="#FFA6A6A6" Background="{x:Null}" BorderBrush="{x:Null}"
             HorizontalAlignment="Left" Height="58" Margin="71,62,0,0" TextWrapping="NoWrap" Text="검색: 일정 명, 연도, 시간" VerticalAlignment="Top" Width="279"/>
@@ -126,6 +127,18 @@
             <Button Content="일정 생성" Style="{StaticResource invisibleButton}" FontSize="24"  Margin="559,105,10,0" Click="AddCalendar"/>
 
             <CheckBox x:Name="CB_Add_Calendar_Mode" Content="직접 입력" Style="{StaticResource ResourceKey=DefaultCheckbox}" FontSize="22" HorizontalAlignment="Left" Margin="614,40,0,0" VerticalAlignment="Top" Checked="ChangeAddCalendarCheckbox" Unchecked="ChangeAddCalendarCheckbox"/>
+        </Grid>
+        <Image Source="./../Resources/Icon/Index.ico" Margin="1078,647,65,10"/>
+
+        <Grid Name="Grid_Options" HorizontalAlignment="Left" Height="745" Margin="1264,47,0,0" VerticalAlignment="Top" Width="60">
+            <Border CornerRadius="0, 10, 10, 0" Background="#FFFFA4A3" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="150" VerticalAlignment="Top" Width="61" Margin="-1,0,0,0"/>
+            <Button Content="Daily" Style="{StaticResource invisibleButton}" FontSize="18" HorizontalAlignment="Center" Margin="-1,0,0,0" VerticalAlignment="Top" Width="61" Height="150"/>
+
+            <Border CornerRadius="0, 10, 10, 0" Background="#FFE89889" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="150" VerticalAlignment="Top" Width="61" Margin="-1,150,0,0"/>
+            <Button Content="Weekly" Style="{StaticResource invisibleButton}" FontSize="18" HorizontalAlignment="Center" Margin="-1,150,0,0" VerticalAlignment="Top" Width="61" Height="150"/>
+
+            <Border CornerRadius="0, 10, 10, 0" Background="#FFFFB796" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="150" VerticalAlignment="Top" Width="61" Margin="-1,300,0,0"/>
+            <Button Content="Monthly" Style="{StaticResource invisibleButton}" FontSize="18" HorizontalAlignment="Center" Margin="-1,300,0,0" VerticalAlignment="Top" Width="61" Height="150"/>
         </Grid>
 
     </Grid>

@@ -36,6 +36,7 @@ namespace MyCalendar.Controller
             InitializeComponent();
             InitializeCalendarList();
             ToggleAddCalendarMenu(Visibility.Visible);
+            Grid_Options.Visibility = Visibility.Collapsed;
         }
 
         /*
@@ -137,6 +138,10 @@ namespace MyCalendar.Controller
             CheckBox box = sender as CheckBox;
             ToggleAddCalendarMenu(box.IsChecked.Value ? Visibility.Collapsed : Visibility.Visible);
         }
+        private void ToggleOption(object sender, RoutedEventArgs e)
+        {
+            ToggleOptions();
+        }
 
         /*
          * Non-Event Methods
@@ -157,6 +162,14 @@ namespace MyCalendar.Controller
 
             TB_Add_Calendar_Day.Visibility = complement;
             TB_Add_Calendar_Day_Label.Visibility = complement;
+        }
+
+        private void ToggleOptions()
+        {
+            Visibility v = Visibility.Visible;
+            if (Grid_Options.Visibility == Visibility.Visible) v = Visibility.Collapsed;
+
+            Grid_Options.Visibility = v;
         }
 
         private bool IsNumber(string str)
