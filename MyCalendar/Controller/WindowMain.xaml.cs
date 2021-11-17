@@ -26,10 +26,16 @@ namespace MyCalendar.Controller
         private int year;
         private int month;
 
+        private readonly int _cal_listGridHeight = 100;
+        private readonly int _cal_listGridWidth = 365;
+        private readonly int _cal_dayGridHeight = 101;
+        private readonly int _cal_dayGridWidth = 128;
+
         public WindowMain()
         {
             InitializeComponent();
             InitializeCalendarList();
+            ToggleAddCalendarMenu(Visibility.Visible);
         }
 
         /*
@@ -129,24 +135,29 @@ namespace MyCalendar.Controller
         private void ChangeAddCalendarCheckbox(object sender, RoutedEventArgs e)
         {
             CheckBox box = sender as CheckBox;
-
-            CB_Add_Calendar_Sunday.Visibility = box.IsChecked.Value ? Visibility.Collapsed : Visibility.Visible;
-            CB_Add_Calendar_Monday.Visibility = box.IsChecked.Value ? Visibility.Collapsed : Visibility.Visible;
-            CB_Add_Calendar_Tuesday.Visibility = box.IsChecked.Value ? Visibility.Collapsed : Visibility.Visible;
-            CB_Add_Calendar_Wednsday.Visibility = box.IsChecked.Value ? Visibility.Collapsed : Visibility.Visible;
-            CB_Add_Calendar_Thursday.Visibility = box.IsChecked.Value ? Visibility.Collapsed : Visibility.Visible;
-            CB_Add_Calendar_Friday.Visibility = box.IsChecked.Value ? Visibility.Collapsed : Visibility.Visible;
-            CB_Add_Calendar_Saturday.Visibility = box.IsChecked.Value ? Visibility.Collapsed : Visibility.Visible;
-
-            TB_Add_Calendar_Day.Visibility = box.IsChecked.Value ? Visibility.Visible : Visibility.Collapsed;
-            TB_Add_Calendar_Day_Label.Visibility = box.IsChecked.Value ? Visibility.Visible : Visibility.Collapsed;
-
-
+            ToggleAddCalendarMenu(box.IsChecked.Value ? Visibility.Collapsed : Visibility.Visible);
         }
 
         /*
          * Non-Event Methods
          */
+
+        private void ToggleAddCalendarMenu(Visibility v)
+        {
+            Visibility complement = Visibility.Visible;
+            if (v == Visibility.Visible) complement = Visibility.Collapsed;
+
+            CB_Add_Calendar_Sunday.Visibility = v;
+            CB_Add_Calendar_Monday.Visibility = v;
+            CB_Add_Calendar_Tuesday.Visibility = v;
+            CB_Add_Calendar_Wednsday.Visibility = v;
+            CB_Add_Calendar_Thursday.Visibility = v;
+            CB_Add_Calendar_Friday.Visibility = v;
+            CB_Add_Calendar_Saturday.Visibility = v;
+
+            TB_Add_Calendar_Day.Visibility = complement;
+            TB_Add_Calendar_Day_Label.Visibility = complement;
+        }
 
         private bool IsNumber(string str)
         {
@@ -239,7 +250,7 @@ namespace MyCalendar.Controller
         {
 
             RowDefinition rowDefinition = new RowDefinition();
-            rowDefinition.Height = new GridLength(60.0D);
+            rowDefinition.Height = new GridLength(_cal_listGridHeight);
 
             Grid_Calendars_List.RowDefinitions.Add(rowDefinition);
             Grid grid = CreateCalendarListData(year, month);
@@ -295,13 +306,10 @@ namespace MyCalendar.Controller
             Grid_Calendar.RowDefinitions.Clear();
             Grid_Calendar.ColumnDefinitions.Clear();
 
-            int height = 66;
-            int width = 100;
-
             for (int row = 0; row < 5; row++)
             {
                 RowDefinition rowDef = new RowDefinition();
-                rowDef.Height = new GridLength(height);
+                rowDef.Height = new GridLength(_cal_dayGridHeight);
 
                 Grid_Calendar.RowDefinitions.Add(rowDef);
             }
@@ -309,7 +317,7 @@ namespace MyCalendar.Controller
             for (int col = 0; col < 7; col++)
             {
                 ColumnDefinition colDef = new ColumnDefinition();
-                colDef.Width = new GridLength(width);
+                colDef.Width = new GridLength(_cal_dayGridWidth);
 
                 Grid_Calendar.ColumnDefinitions.Add(colDef);
             }
@@ -322,13 +330,13 @@ namespace MyCalendar.Controller
         private Grid CreateCalendarListData(int year, int month)
         {
             Grid grid = new Grid();
-            grid.Height = 60; grid.Width = 225;
+            grid.Height = _cal_listGridHeight; grid.Width = _cal_listGridWidth;
 
             Label title = new Label();
             title.Content = $"{year}. {month}.";
             title.Style = (Style)Application.Current.Resources["DefaultFont"];
             title.Foreground = new SolidColorBrush(Color.FromRgb(0, 0, 0));
-            title.FontSize = 18;
+            title.FontSize = 30;
             title.Margin = new Thickness(5, 4, 99, 28);
 
             Label description = new Label();
@@ -339,15 +347,15 @@ namespace MyCalendar.Controller
             description.Content = CheckContentLength(message, 20);
             description.Style = (Style)Application.Current.Resources["DefaultFont"];
             description.Foreground = new SolidColorBrush(Color.FromRgb(0x7f, 0x7f, 0x7f));
-            description.FontSize = 18;
-            description.Margin = new Thickness(10, 23, 10, 0);
+            description.FontSize = 26;
+            description.Margin = new Thickness(10, 40, 10, 0);
 
             Button btn = new Button();
             btn.Name = $"Btn_Calendar_List_{year}Y{KeepTwoCharacters(month)}M";
             btn.Background = new SolidColorBrush(Color.FromRgb(0xFF, 0xFF, 0xFF));
             btn.Opacity = 0.01f;
-            btn.Width = 225;
-            btn.Height = 60;
+            btn.Width = _cal_listGridWidth;
+            btn.Height = _cal_listGridHeight;
             btn.Click += ChangeViewCalendar;
 
             Border decoBorder = new Border();
@@ -355,8 +363,8 @@ namespace MyCalendar.Controller
             decoBorder.Background = new SolidColorBrush(Color.FromRgb(0x7F, 0x7F, 0x7F));
             decoBorder.BorderBrush = null;
             decoBorder.Height = 5;
-            decoBorder.Width = 215;
-            decoBorder.Margin = new Thickness(5, 55, 0, 0);
+            decoBorder.Width = _cal_listGridWidth;
+            decoBorder.Margin = new Thickness(0, _cal_listGridHeight-7, 0, 0);
 
             grid.Children.Add(title);
             grid.Children.Add(description);
@@ -369,21 +377,21 @@ namespace MyCalendar.Controller
         private Grid CreateDateNotTarget(DateTime date)
         {
             Grid grid = new Grid();
-            grid.Height = 66; grid.Width = 100;
+            grid.Height = _cal_dayGridHeight; grid.Width = _cal_dayGridWidth;
             grid.Margin = new Thickness(1, 0, 0, 1);
             grid.Background = new SolidColorBrush(Color.FromRgb(0xB7, 0xC7, 0xE8));
 
             Border border = new Border();
             border.BorderBrush = new SolidColorBrush(Color.FromRgb(0xFF, 0xFF, 0xFF));
             border.HorizontalAlignment = HorizontalAlignment.Left; border.VerticalAlignment = VerticalAlignment.Top;
-            border.Height = 66; border.Width = 100;
+            border.Height = _cal_dayGridHeight; border.Width = _cal_dayGridWidth;
 
             Label dayDate = new Label();
             dayDate.Content = date.Day;
             dayDate.Foreground = new SolidColorBrush(Color.FromRgb(0x66, 0x66, 0x66));
-            dayDate.Height = 31; dayDate.Width = 31;
+            dayDate.Height = 40; dayDate.Width = 40;
             dayDate.HorizontalAlignment = HorizontalAlignment.Left; dayDate.VerticalAlignment = VerticalAlignment.Top;
-            dayDate.FontSize = 19; dayDate.FontWeight = FontWeights.Bold;
+            dayDate.FontSize = 23; dayDate.FontWeight = FontWeights.Bold;
             dayDate.Margin = new Thickness(-2, -5, 0, 0);
 
             Button btn = new Button();
@@ -429,21 +437,21 @@ namespace MyCalendar.Controller
         private Grid CreateDate(DateTime date)
         {
             Grid grid = new Grid();
-            grid.Height = 66; grid.Width = 100;
+            grid.Height = _cal_dayGridHeight; grid.Width = _cal_dayGridWidth;
             grid.Margin = new Thickness(1, 0, 0, 1);
             grid.Background = new SolidColorBrush(Color.FromRgb(0xC7, 0xD7, 0xF8));
 
             Border border = new Border();
             border.BorderBrush = new SolidColorBrush(Color.FromRgb(0xFF, 0xFF, 0xFF));
             border.HorizontalAlignment = HorizontalAlignment.Left; border.VerticalAlignment = VerticalAlignment.Top;
-            border.Height = 66; border.Width = 100;
+            border.Height = _cal_dayGridHeight; border.Width = _cal_dayGridWidth;
 
             Label dayDate = new Label();
             dayDate.Content = date.Day;
             dayDate.Foreground = new SolidColorBrush(Color.FromRgb(0x00, 0x00, 0x00));
-            dayDate.Height = 31; dayDate.Width = 31;
+            dayDate.Height = 40; dayDate.Width = 40;
             dayDate.HorizontalAlignment = HorizontalAlignment.Left; dayDate.VerticalAlignment = VerticalAlignment.Top;
-            dayDate.FontSize = 19; dayDate.FontWeight = FontWeights.Bold;
+            dayDate.FontSize = 23; dayDate.FontWeight = FontWeights.Bold;
             dayDate.Margin = new Thickness(-2, -5, 0, 0);
 
             Button btn = new Button();
@@ -463,17 +471,21 @@ namespace MyCalendar.Controller
                 foreach (Work work in works)
                 {
                     if (work.GetDay() != date.Day) continue;
-                    if (workCount++ > 1) break;
+                    if (workCount++ > 2) break;
 
                     Label dayWork = new Label();
                     dayWork.Style = (Style)Application.Current.Resources["DefaultFont"];
                     dayWork.Foreground = new SolidColorBrush(Color.FromRgb(0x00, 0x00, 0x0D));
-                    dayWork.FontSize = 18;
+                    dayWork.FontSize = 21;
                     dayWork.Content = $"{work.GetStartTime(true)} {CheckContentLength(work.GetDescription(), 5)}";
                     dayWork.Margin = new Thickness(-3, 24, 0, 16);
                     if (workCount == 2)
                     {
                         dayWork.Margin = new Thickness(-3, 41, 0, 0);
+                    }
+                    if (workCount == 3)
+                    {
+                        dayWork.Margin = new Thickness(-3, 58, 0, 0);
                     }
                     grid.Children.Add(dayWork);
                 }
